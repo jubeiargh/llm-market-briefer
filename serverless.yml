@@ -1,0 +1,63 @@
+service: market-briefing
+
+
+provider:
+  name: aws
+  runtime: python3.10
+  region: us-east-1
+  timeout: 60
+  memorySize: 512
+  environment:
+    OPEN_AI_API_KEY: ${env:OPEN_AI_API_KEY}
+    FINLIGHT_API_KEY: ${env:FINLIGHT_API_KEY}
+    EMAIL_USER: ${env:EMAIL_USER}
+    EMAIL_PASS: ${env:EMAIL_PASS}
+    EMAIL_TO: ${env:EMAIL_TO}
+    EMAIL_SUBJECT: ${env:EMAIL_SUBJECT}
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+          Resource: "*"
+
+functions:
+  briefer:
+    handler: market_briefing/handler.main
+    events:
+      - schedule:
+          rate: cron(0 7 * * ? *) # every day at 07:00 UTC
+          enabled: true
+          input:
+            subjects:
+              - Trump tariffs
+              - Nvidia
+              - ECB policy
+
+package:
+  patterns:
+    - "!node_modules/**"
+    - "!venv/**"
+    - "!tests/**"
+    - "!__pycache__/**"
+    - "!*.md"
+    - "**/*.py"
+    - "utils/**"
+    - "tools/**"
+    - "agents/**"
+    - "workflow/**"
+    - "llm/**"
+    - "config.py"
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    dockerizePip: true
+    zip: true
+    slim: true
+    strip: false
