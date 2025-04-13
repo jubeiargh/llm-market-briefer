@@ -2,12 +2,19 @@
 
 An automated financial & political news summarizer that fetches updates on predefined topics and compiles a professional, digest-style morning market briefing.
 
-Built with:
+### 🛠️ Built With
 
-- 🧠 LangChain + OpenAI (GPT-4o)
-- 📰 Finlight API for news
-- 🧩 LangGraph for multi-agent workflows
-- ☁️ Serverless Framework for AWS Lambda deployment
+- 🧠 [LangChain](https://www.langchain.com/) + [OpenAI GPT-4o](https://platform.openai.com/docs/guides/gpt)  
+  Natural language reasoning, summarization, and formatting
+
+- 📰 [Finlight API](https://finlight.me/)  
+  Real-time financial & geopolitical news aggregation
+
+- 🧩 [LangGraph](https://www.langchain.com/langgraph)  
+  Multi-agent orchestration and stateful workflows
+
+- ☁️ [Serverless Framework](https://www.serverless.com/) for AWS Lambda  
+  Scalable deployment with daily cron triggers
 
 ---
 
