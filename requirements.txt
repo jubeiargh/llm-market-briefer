@@ -5,5 +5,3 @@ langchain_openai
 langgraph
 finlight_client
 pydantic
-smtplib
-email
