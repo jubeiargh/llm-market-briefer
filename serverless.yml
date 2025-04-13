@@ -43,6 +43,6 @@ package:
 custom:
   pythonRequirements:
     dockerizePip: true
-    slim: true
+    slim: false
     strip: false
     fileName: requirements.txt
