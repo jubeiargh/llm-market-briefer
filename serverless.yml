@@ -1,9 +1,11 @@
 service: market-briefing
 
+plugins:
+  - serverless-python-requirements
 
 provider:
   name: aws
-  runtime: python3.10
+  runtime: python3.11
   region: us-east-1
   timeout: 60
   memorySize: 512
@@ -40,20 +42,19 @@ functions:
 package:
   patterns:
     - "!node_modules/**"
-    - "!venv/**"
+    - "!.venv/**"
     - "!tests/**"
     - "!__pycache__/**"
     - "!*.md"
-    - "**/*.py"
-    - "utils/**"
-    - "tools/**"
-    - "agents/**"
-    - "workflow/**"
-    - "llm/**"
-    - "config.py"
+    - "!*.zip"
+    - "!*.log"
+    - "!package-lock.json"
+    - "!package.json"
 
-plugins:
-  - serverless-python-requirements
+    # Include only what we need
+    - "market_briefing/**"
+    - "requirements.txt"
+    - ".env"
 
 custom:
   pythonRequirements:
@@ -61,3 +62,4 @@ custom:
     zip: true
     slim: true
     strip: false
+    platform: linux/amd64
