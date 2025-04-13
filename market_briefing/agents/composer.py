@@ -5,20 +5,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-# Phrases that likely indicate there's no real news
-FALLBACK_PHRASES = [
-    "unable to retrieve",
-    "no information",
-    "no articles",
-    "if you'd like",
-    "let me know how you'd like to proceed",
-]
-
-
-def is_meaningful_summary(summary: str) -> bool:
-    summary_lower = summary.lower()
-    return not any(phrase in summary_lower for phrase in FALLBACK_PHRASES)
-
 
 def compose_briefing_node(state: dict) -> dict:
     now = datetime.now(timezone.utc).strftime("%B %d, %Y")
@@ -26,13 +12,12 @@ def compose_briefing_node(state: dict) -> dict:
     logger.info("🧩 Composing final morning market briefing...")
     logger.info(f"📦 Current subjects and summaries: {state['analyst_outputs']}")
 
-
     joined_summaries = "\n\n".join(
         f"🔹 {subj}\n{summary.strip()}"
         for subj, summary in state["analyst_outputs"].items()
         if summary and isinstance(summary, str)
     )
-    
+
     # Clear instruction for GPT to *only format*, not summarize away valid sections
     formatting_prompt = f"""
 You are a professional financial news editor. Format the following topic summaries into a clean, well-presented morning market briefing.
