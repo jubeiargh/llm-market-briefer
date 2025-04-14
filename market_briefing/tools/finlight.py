@@ -1,9 +1,10 @@
 from langchain.tools import StructuredTool
 from finlight_client import FinlightApi
-from finlight_client.models import ApiResponse
-from pydantic import BaseModel, Field
+from finlight_client.models import BasicArticleResponse, ApiConfig, GetArticlesParams
+from pydantic import BaseModel, Field, field_validator
 
 from market_briefing.config import FINLIGHT_API_KEY
+
 
 
 class GetBasicArticle(BaseModel):
@@ -13,11 +14,15 @@ class GetBasicArticle(BaseModel):
     pageSize: int = Field(100, description="Number of articles per page")
     page: int = Field(1, description="Page number")
 
+    model_config = {"populate_by_name": True}
+
 
 def search_finlight_articles(params: GetBasicArticle) -> str:
-    client = FinlightApi(config={"api_key": FINLIGHT_API_KEY})
-    param_dict = params.model_dump(by_alias=True)
-    api_response: ApiResponse = client.articles.get_basic_articles(params=param_dict)
+    client = FinlightApi(config=ApiConfig(api_key=FINLIGHT_API_KEY))
+
+    api_response: BasicArticleResponse = client.articles.get_basic_articles(
+        params=params
+    )
 
     if not api_response:
         return "No articles found."
